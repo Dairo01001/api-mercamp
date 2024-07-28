@@ -8,6 +8,9 @@ export class UserEntity implements User {
   }
 
   @ApiProperty()
+  phone: string;
+
+  @ApiProperty()
   id: string;
 
   @ApiProperty()

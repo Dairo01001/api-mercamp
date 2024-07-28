@@ -8,11 +8,74 @@ datasource db {
 }
 
 model User {
-  id       String @id @default(uuid())
-  name     String
-  email    String @unique
-  password String
-
+  id        String   @id @default(uuid())
+  name      String
+  email     String   @unique
+  phone     String?
+  password  String
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+
+  prices SellerPrices[]
+  bids   ProductBids[]
+}
+
+model Product {
+  id          String @id @default(uuid())
+  name        String
+  image       String
+  description String
+
+  sellers SellerPrices[]
+  buyers  ProductBids[]
+}
+
+model UnitTypes {
+  id   String @id @default(uuid())
+  name String @unique
+
+  prices SellerPrices[]
+  bids   ProductBids[]
+}
+
+model SellerPrices {
+  id        String   @id @default(uuid())
+  price     Int
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  unit      UnitTypes   @relation(fields: [unitId], references: [id])
+  unitId    String
+  seller    User        @relation(fields: [sellerId], references: [id])
+  sellerId  String
+  product   Product     @relation(fields: [productId], references: [id])
+  productId String
+  buyers    PriceBids[]
+}
+
+model ProductBids {
+  id        String   @id @default(uuid())
+  amount    Int
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  unit      UnitTypes   @relation(fields: [unitId], references: [id])
+  unitId    String
+  product   Product     @relation(fields: [productId], references: [id])
+  productId String
+  buyer     User        @relation(fields: [buyerId], references: [id])
+  buyerId   String
+  sellers   PriceBids[]
+}
+
+model PriceBids {
+  id        String   @id @default(uuid())
+  amount    Int
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  price   SellerPrices @relation(fields: [priceId], references: [id])
+  priceId String
+  bid     ProductBids  @relation(fields: [bidId], references: [id])
+  bidId   String
 }

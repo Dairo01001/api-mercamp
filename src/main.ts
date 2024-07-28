@@ -18,6 +18,7 @@ async function bootstrap() {
     .setTitle('MerCamp API')
     .setDescription('API para el proyecto MerCamp')
     .setVersion('1.0')
+    .addBearerAuth()
     .build();
 
   const document = SwaggerModule.createDocument(app, config);
